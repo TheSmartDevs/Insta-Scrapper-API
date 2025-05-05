@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="SmartDev's Instagram Scraper API - Extract media URLs from Instagram posts with ease.">
+    <meta property="og:title" content="SmartDev's Instagram Scraper API">
+    <meta property="og:description" content="Fast, reliable API to scrape Instagram media URLs. Try it now!">
+    <title>SmartDev's Insta Scraper API</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <!-- AOS CSS -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <style>
+        :root {
+            --primary-bg: #ffffff;
+            --secondary-bg: #f8f9fa;
+            --accent-color: #28a745;
+            --text-color: #333333;
+            --hover-scale: 1.05;
+            --shadow-color: rgba(0, 0, 0, 0.2);
+        }
+
+        [data-theme="dark"] {
+            --primary-bg: #0a0e17;
+            --secondary-bg: #1a1f2e;
+            --accent-color: #00ff88;
+            --text-color: #d4d4d8;
+            --shadow-color: rgba(0, 0, 0, 0.7);
+        }
+
+        body {
+            background-color: var(--primary-bg);
+            color: var(--text-color);
+            font-family: 'Poppins', sans-serif;
+            scroll-behavior: smooth;
+            transition: background-color 0.3s, color 0.3s;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        .hero {
+            background: linear-gradient(to right, #e8f5e9, #c8e6c9);
+            padding: 120px 0;
+            text-align: center;
+            border-bottom: 2px solid var(--accent-color);
+        }
+
+        [data-theme="dark"] .hero {
+            background: linear-gradient(to right, #1a1f2e, #2a3247);
+            border-bottom: 2px solid var(--accent-color);
+        }
+
+        .hero h1 {
+            font-size: 4rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: var(--text-color);
+            text-shadow: 2px 2px 4px var(--shadow-color);
+        }
+
+        .hero p {
+            font-size: 1.6rem;
+            color: var(--text-color);
+        }
+
+        .navbar {
+            background-color: var(--secondary-bg);
+            box-shadow: 0 2px 8px var(--shadow-color);
+            transition: background-color 0.3s;
+        }
+
+        .navbar.scrolled {
+            background-color: var(--primary-bg);
+        }
+
+        .navbar .nav-link {
+            color: var(--text-color);
+            font-weight: 400;
+            transition: color 0.3s, transform 0.3s;
+        }
+
+        [data-theme="dark"] .navbar .nav-link {
+            color: var(--text-color);
+        }
+
+        .navbar .nav-link:hover {
+            color: var(--accent-color);
+            transform: translateY(-2px);
+        }
+
+        section {
+            padding: 80px 0;
+        }
+
+        h2 {
+            color: var(--accent-color);
+            font-weight: 600;
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        h2::after {
+            content: '';
+            width: 50px;
+            height: 3px;
+            background: var(--accent-color);
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+        }
+
+        .btn-custom, .btn-primary {
+            background-color: var(--accent-color);
+            color: #ffffff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            transition: transform 0.2s, box-shadow 0.2s, background-color 0.3s;
+        }
+
+        .btn-custom:hover, .btn-primary:hover {
+            transform: scale(var(--hover-scale));
+            box-shadow: 0 5px 15px rgba(40, 167, 69, 0.4);
+            background-color: #218838;
+        }
+
+        [data-theme="dark"] .btn-custom:hover, [data-theme="dark"] .btn-primary:hover {
+            box-shadow: 0 5px 15px rgba(0, 255, 136, 0.4);
+            background-color: #00cc70;
+        }
+
+        .card {
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px var(--shadow-color);
+            transition: transform 0.3s;
+            background-color: var(--primary-bg);
+            color: var(--text-color);
+        }
+
+        [data-theme="dark"] .card {
+            background-color: var(--primary-bg);
+            color: var(--text-color);
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .accordion-button {
+            background-color: var(--secondary-bg);
+            color: var(--text-color);
+            font-weight: 500;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        [data-theme="dark"] .accordion-button {
+            background-color: var(--secondary-bg);
+            color: var(--text-color);
+        }
+
+        .accordion-button:not(.collapsed) {
+            background-color: var(--accent-color);
+            color: #ffffff;
+        }
+
+        .accordion-body {
+            background-color: var(--primary-bg);
+            border: 1px solid #dee2e6;
+            color: var(--text-color);
+        }
+
+        [data-theme="dark"] .accordion-body {
+            border: 1px solid #3a3f4e;
+            color: var(--text-color);
+        }
+
+        .input-group input {
+            transition: box-shadow 0.3s, border-color 0.3s;
+        }
+
+        .input-group input:focus {
+            box-shadow: 0 0 10px rgba(40, 167, 69, 0.5);
+            border-color: var(--accent-color);
+        }
+
+        .input-group input.is-valid {
+            border-color: var(--accent-color);
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'%3E%3Cpath fill='%2328a745' d='M2.3 6.73L.6 4.53c-.4-1.04.46-1.4 1.1-.8l1.1 1.4 3.4-3.8c.6-.63 1.6-.27 1.2.7l-4 4.6c-.43.5-.8.4-1.1.1z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+                background-position: right calc(0.375em + 0.1875rem) center;
+            background-size: calc(0.75em + 0.375rem) calc(0.75em + 0.375rem);
+        }
+
+        .input-group input.is-invalid {
+            border-color: #dc3545;
+        }
+
+        .btn-copy {
+            transition: all 0.3s;
+        }
+
+        .btn-copy:hover {
+            background: var(--accent-color);
+            box-shadow: 0 0 10px rgba(40, 167, 69, 0.5);
+        }
+
+        .text-accent {
+            color: var(--accent-color);
+            transition: color 0.3s;
+        }
+
+        .text-accent:hover {
+            color: #1e7e34;
+        }
+
+        [data-theme="dark"] .text-accent:hover {
+            color: #00cc70;
+        }
+
+        .fa-instagram, .fa-telegram, .fa-github {
+            font-size: 1.2rem;
+            margin-right: 5px;
+        }
+
+        .glow-text {
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+        }
+
+        #progress-bar {
+            height: 4px;
+            background: var(--accent-color);
+            transition: width 0.3s ease-in-out;
+        }
+
+        .starry-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.5s;
+        }
+
+        [data-theme="dark"] .starry-bg {
+            opacity: 0.3;
+        }
+
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 2s infinite alternate;
+        }
+
+        @keyframes twinkle {
+            0% { opacity: 0.3; }
+            100% { opacity: 1; }
+        }
+
+        footer {
+            background-color: var(--secondary-bg);
+            padding: 30px 0;
+            text-align: center;
+            border-top: 1px solid #dee2e6;
+        }
+
+        [data-theme="dark"] footer {
+            border-top: 1px solid #3a3f4e;
+        }
+
+        footer p {
+            color: var(--text-color);
+        }
+
+        .social-icons a {
+            font-size: 2rem;
+            margin: 0 15px;
+            transition: transform 0.3s, opacity 0.3s;
+        }
+
+        .social-icons a:hover {
+            transform: scale(1.2);
+            opacity: 0.8;
+        }
+
+        .fa-facebook-f { color: #1877f2; }
+        .fa-github { color: #181717; }
+        [data-theme="dark"] .fa-github { color: #d4d4d8; }
+        .fa-telegram { color: #0088cc; }
+        .fa-instagram { color: #e4405f; }
+        .fa-twitter { color: #1da1f2; }
+
+        #back-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            display: none;
+            background-color: var(--accent-color);
+            color: #ffffff;
+            border: none;
+            padding: 12px 18px;
+            border-radius: 50%;
+            transition: transform 0.2s, opacity 0.3s;
+        }
+
+        #back-to-top:hover {
+            transform: scale(1.1);
+            opacity: 0.9;
+        }
+
+        .theme-toggle {
+            background-color: transparent;
+            border: none;
+            color: var(--text-color);
+            font-size: 1.2rem;
+            padding: 8px;
+            transition: color 0.3s, transform 0.3s;
+            display: flex;
+            align-items: center;
+        }
+
+        .theme-toggle:hover {
+            color: var(--accent-color);
+            transform: scale(1.2);
+        }
+
+        .theme-toggle .fa-sun { display: inline; }
+        .theme-toggle .fa-moon { display: none; }
+        [data-theme="dark"] .theme-toggle .fa-sun { display: none; }
+        [data-theme="dark"] .theme-toggle .fa-moon { display: inline; }
+
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2.5rem; }
+            .hero p { font-size: 1.2rem; }
+            section { padding: 50px 0; }
+            .social-icons a { font-size: 1.5rem; margin: 0 10px; }
+            .theme-toggle { font-size: 1rem; padding: 6px; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Starry Background for Dark Mode -->
+    <div class="starry-bg" id="starry-bg"></div>
+
+    <!-- Hero Section -->
+    <header class="hero">
+        <div class="container">
+            <h1>SmartDev's Insta Scraper API <i class="fab fa-instagram me-2 text-accent"></i></h1>
+            <p>Extract direct media URLs from Instagram posts with ease and style! ✨</p>
+            <a href="#try-it" class="btn btn-custom mt-4">Try It Now</a>
+        </div>
+    </header>
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="#">Insta Scraper API <i class="fab fa-instagram me-2 text-accent"></i></a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto align-items-center">
+                    <li class="nav-item"><a class="nav-link" href="#home">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#try-it">Try It</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#docs">Docs</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#contribute">Contribute</a></li>
+                    <li class="nav-item">
+                        <button id="theme-toggle" class="btn theme-toggle" aria-label="Toggle theme">
+                            <i class="fas fa-sun"></i>
+                            <i class="fas fa-moon"></i>
+                        </button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Try It Section -->
+    <section id="try-it" class="container" data-aos="fade-up">
+        <h2>Try It Out 🌟</h2>
+        <div class="card p-4">
+            <p class="text-center text-success fs-5 mb-4">API Status: <span id="api-status" class="fw-bold">Checking...</span> ⚡️</p>
+            <form id="api-form" class="input-group mb-3" onsubmit="return false;">
+                <span class="input-group-text"><i class="fa-brands fa-instagram"></i></span>
+                <input id="instagram-url" type="text" class="form-control" placeholder="Enter Instagram post URL (e.g., https://www.instagram.com/p/XXXXX/)" required>
+                <button id="submit-url" class="btn btn-primary" type="button">Get Media URLs</button>
+            </form>
+            <div id="result" class="mt-3"></div>
+        </div>
+    </section>
+
+    <!-- Documentation Section -->
+    <section id="docs" class="container" data-aos="fade-up">
+        <h2>API Documentation 📚</h2>
+        <div class="accordion" id="docsAccordion">
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingApi">
+                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseApi" aria-expanded="true" aria-controls="collapseApi">
+                        POST /download - How It Works
+                    </button>
+                </h2>
+                <div id="collapseApi" class="accordion-collapse collapse show" aria-labelledby="headingApi" data-bs-parent="#docsAccordion">
+                    <div class="accordion-body">
+                        <p>Send a POST request to <code>/download</code> with a JSON payload containing an Instagram post URL.</p>
+                        <pre>
+<strong>Request Example:</strong>
+curl -X POST https://your-api-url/download \
+-H "Content-Type: application/json" \
+-d '{"url": "https://www.instagram.com/p/XXXXX/"}'
+
+<strong>Response Example (Success):</strong>
+{
+  "status": "success",
+  "message": "Media URLs extracted successfully.",
+  "media_urls": [
+    "https://instagram.com/.../media1.jpg",
+    "https://instagram.com/.../media2.mp4"
+  ]
+}
+
+<strong>Response Example (Error):</strong>
+{
+  "status": "error",
+  "message": "Invalid Instagram URL! Please ensure it contains a valid post code.",
+  "media_urls": []
+}
+                        </pre>
+                        <p><strong>Note:</strong> RequiresF Requires valid Instagram session cookies (<code>cookies/cookies.txt</code>) in Netscape format with <code>sessionid</code> and <code>csrftoken</code>.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contribute Section -->
+    <section id="contribute" class="container" data-aos="fade-up">
+        <h2>Contribute 🌟</h2>
+        <div class="card p-4">
+            <p>Contributions are welcome! Follow these steps to contribute:</p>
+            <ol>
+                <li>Fork the repository. 🍴</li>
+                <li>Create a new branch (<code>git checkout -b feature-branch</code>). 🌿</li>
+                <li>Commit your changes (<code>git commit -m 'Add new feature'</code>). 💾</li>
+                <li>Push to the branch (<code>git push origin feature-branch</code>). 🚀</li>
+                <li>Open a Pull Request. 📬</li>
+            </ol>
+            <p>Check out the repository on <a href="https://github.com/TheSmartDevs/Insta-Scrapper-API" target="_blank" class="text-accent"><i class="fa-brands fa-github"></i> @TheSmartDevs</a>.</p>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>Built with ❤️ by <a href="https://x.com/ISmartDevs" target="_blank" class="text-accent"><i class="fa-brands fa-instagram"></i> ISmartDevs</a></p>
+        <p>Join our community at <a href="https://t.me/TheSmartDev" target="_blank" class="text-accent"><i class="fa-brands fa-telegram"></i> TheSmartDev</a></p>
+        <p>This API is Open Source on <a href="https://github.com/TheSmartDevs/Insta-Scrapper-API" target="_blank" class="text-accent"><i class="fa-brands fa-github"></i> @TheSmartDevs</a></p>
+        <p>© 2025 Instagram Post Scraper API | Powered by <a href="https://t.me/TheSmartDev" target="_blank" class="text-accent"><i class="fa-brands fa-telegram"></i> TheSmartDev</a></p>
+    </footer>
+
+    <!-- Back to Top Button -->
+    <button id="back-to-top" class="btn"><i class="fas fa-arrow-up"></i></button>
+
+    <!-- GSAP for Animations -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" integrity="sha512-7eHRwcbYkK4b9aH0h67vO4z6e7FBaJZ6gn2xlt6lDOck'nrZPDurW8nW47SO7iAwd+rCE2+K3lQ2+Ve16PzfO6w==" crossorigin="anonymous"></script>
+    <!-- Bootstrap JS and Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <!-- AOS JS -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <!-- Confetti for Success Animation -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
+    <!-- Client-side JavaScript -->
+    <script>
+        // Initialize AOS
+        AOS.init({
+            duration: 1000,
+            once: true
+        });
+
+        // Initialize Bootstrap Tooltips
+        const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+        [...tooltipTriggerList].forEach(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
+
+        // Theme Toggle
+        const themeToggle = document.getElementById('theme-toggle');
+        const currentTheme = localStorage.getItem('theme') || 'light';
+        if (currentTheme === 'dark') {
+            document.documentElement.setAttribute('data-theme', 'dark');
+            themeToggle.querySelector('.fa-moon').style.display = 'inline';
+            themeToggle.querySelector('.fa-sun').style.display = 'none';
+        } else {
+            document.documentElement.setAttribute('data-theme', 'light');
+            themeToggle.querySelector('.fa-sun').style.display = 'inline';
+            themeToggle.querySelector('.fa-moon').style.display = 'none';
+        }
+
+        themeToggle.addEventListener('click', () => {
+            let theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', theme);
+            localStorage.setItem('theme', theme);
+            if (theme === 'dark') {
+                themeToggle.querySelector('.fa-moon').style.display = 'inline';
+                themeToggle.querySelector('.fa-sun').style.display = 'none';
+            } else {
+                themeToggle.querySelector('.fa-sun').style.display = 'inline';
+                themeToggle.querySelector('.fa-moon').style.display = 'none';
+            }
+            generateStars();
+        });
+
+        // Generate Starry Background for Dark Mode
+        function generateStars() {
+            const starryBg = document.getElementById('starry-bg');
+            starryBg.innerHTML = '';
+            if (document.documentElement.getAttribute('data-theme') === 'dark') {
+                for (let i = 0; i < 50; i++) {
+                    const star = document.createElement('div');
+                    star.className = 'star';
+                    star.style.width = `${Math.random() * 3}px`;
+                    star.style.height = star.style.width;
+                    star.style.left = `${Math.random() * 100}%`;
+                    star.style.top = `${Math.random() * 100}%`;
+                    star.style.animationDelay = `${Math.random() * 2}s`;
+                    starryBg.appendChild(star);
+                }
+            }
+        }
+        generateStars();
+
+        // GSAP Animations with Fallback
+        if (typeof gsap !== 'undefined') {
+            gsap.from('.card', { opacity: 0, y: 50, duration: 1, ease: 'power3.out' });
+            gsap.from('.fade-in', { opacity: 0, y: 20, duration: 1, delay: 0.5, stagger: 0.2 });
+        } else {
+            console.warn('GSAP not loaded; skipping animations.');
+            document.querySelectorAll('.card').forEach(card => card.style.opacity = 1);
+        }
+
+        // Navbar Scroll Effect
+        const navbar = document.querySelector('.navbar');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // Back to Top Button
+        const backToTop = document.getElementById('back-to-top');
+        window.onscroll = function() {
+            if (document.body.scrollTop > 100 || document.documentElement.scrollTop > 100) {
+                backToTop.style.display = 'block';
+            } else {
+                backToTop.style.display = 'none';
+            }
+        };
+
+        backToTop.addEventListener('click', function() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        // Mock API response for testing (replace with actual endpoint)
+        async function checkApiStatus() {
+            const statusEl = document.getElementById('api-status');
+            // Mock response since /download endpoint is not available
+            statusEl.textContent = 'Live';
+            statusEl.className = 'fw-bold text-success';
+            /* Replace with actual API call when endpoint is available:
+            try {
+                const response = await fetch('/download', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ url: '' })
+                });
+                statusEl.textContent = response.ok ? 'Live' : 'Alive ⚡️';
+                statusEl.className = response.ok ? 'fw-bold text-success' : 'fw-bold text-danger';
+            } catch (error) {
+                statusEl.textContent = 'Down';
+                statusEl.className = 'fw-bold text-danger';
+            }
+            */
+        }
+        checkApiStatus();
+
+        // Copy to clipboard function
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                alert('Copied to clipboard! ✨');
+            }).catch(() => {
+                alert('Failed to copy! 😔');
+            });
+        }
+
+        // Debounce function for input validation
+        function debounce(func, wait) {
+            let timeout;
+            return function executedFunction(...args) {
+                const later = () => {
+                    clearTimeout(timeout);
+                    func(...args);
+                };
+                clearTimeout(timeout);
+                timeout = setTimeout(later, wait);
+            };
+        }
+
+        // Real-time URL validation
+        const instagramUrlInput = document.getElementById('instagram-url');
+        instagramUrlInput.addEventListener('input', debounce(() => {
+            const url = instagramUrlInput.value;
+            if (url && url.includes('instagram.com/p/')) {
+                instagramUrlInput.classList.remove('is-invalid');
+                instagramUrlInput.classList.add('is-valid');
+            } else {
+                instagramUrlInput.classList.remove('is-valid');
+                instagramUrlInput.classList.add('is-invalid');
+            }
+        }, 300));
+
+        // Handle form submission
+        document.getElementById('submit-url').addEventListener('click', async () => {
+            const url = instagramUrlInput.value;
+            const resultDiv = document.getElementById('result');
+            const submitBtn = document.getElementById('submit-url');
+            const progressBar = document.getElementById('progress-bar');
+
+            // Basic URL validation
+            if (!url || !url.includes('instagram.com/p/')) {
+                resultDiv.innerHTML = `<div class="alert alert-danger" role="alert">Please enter a valid Instagram post URL! 😔</div>`;
+                return;
+            }
+
+            // Show loading state
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...';
+            resultDiv.innerHTML = '';
+            if (typeof gsap !== 'undefined') {
+                gsap.to(progressBar, { width: '50%', duration: 0.5 });
+            } else {
+                progressBar.style.width = '50%';
+            }
+
+            try {
+                // Mock response for testing
+                const data = {
+                    status: 'success',
+                    message: 'Media URLs extracted successfully (mock response).',
+                    media_urls: [
+                        'https://instagram.com/.../media1.jpg',
+                        'https://instagram.com/.../media2.mp4'
+                    ]
+                };
+                /* Replace with actual API call when endpoint is available:
+                const response = await fetch('/download', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ url })
+                });
+                const data = await response.json();
+                */
+                if (typeof gsap !== 'undefined') {
+                    gsap.to(progressBar, { width: '100%', duration: 0.5, onComplete: () => {
+                        gsap.to(progressBar, { width: '0%', duration: 0.3 });
+                    }});
+                } else {
+                    progressBar.style.width = '100%';
+                    setTimeout(() => { progressBar.style.width = '0%'; }, 500);
+                }
+
+                if (data.status === 'success') {
+                    // Trigger confetti on success
+                    confetti({
+                        particleCount: 100,
+                        spread: 70,
+                        origin: { y: 0.6 }
+                    });
+                    resultDiv.innerHTML = `
+                        <div class="alert alert-success" role="alert">${data.message} 🌟</div>
+                        <ul class="list-group">
+                            ${data.media_urls.map(url => `
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    <a href="${url}" target="_blank" class="text-accent text-decoration-none">${url}</a>
+                                    <button class="btn btn-sm btn-outline-success btn-copy" data-bs-toggle="tooltip" data-bs-placement="top" title="Copy URL" onclick="copyToClipboard('${url}')">Copy</button>
+                                </li>
+                            `).join('')}
+                        </ul>`;
+                } else {
+                    resultDiv.innerHTML = `<div class="alert alert-danger" role="alert">Error: ${data.message} 😔</div>`;
+                }
+            } catch (error) {
+                if (typeof gsap !== 'undefined') {
+                    gsap.to(progressBar, { width: '0%', duration: 0.3 });
+                } else {
+                    progressBar.style.width = '0%';
+                }
+                resultDiv.innerHTML = `<div class="alert alert-danger" role="alert">API Is Down Sir Try Later 😔</div>`;
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = 'Get Media URLs';
+            }
+        });
+    </script>
+</body>
+</html>
