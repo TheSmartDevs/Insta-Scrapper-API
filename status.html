@@ -1,12 +1,15 @@
+<?php
+// No dynamic PHP logic needed, as we're only displaying static documentation
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="SmartDev's Instagram Scraper API - Extract media URLs from Instagram posts with ease.">
-    <meta property="og:title" content="SmartDev's Instagram Scraper API">
-    <meta property="og:description" content="Fast, reliable API to scrape Instagram media URLs. Try it now!">
-    <title>SmartDev's Insta Scraper API</title>
+    <meta name="description" content="SmartDev's Instagram Scraper API - Documentation for extracting media URLs from Instagram posts and reels.">
+    <meta property="og:title" content="SmartDev's Instagram Scraper API Documentation">
+    <meta property="og:description" content="API documentation for scraping Instagram media URLs. Learn how to use it!">
+    <title>SmartDev's Insta Scraper API Documentation</title>
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <!-- Font Awesome for Icons -->
@@ -115,7 +118,7 @@
             left: 0;
         }
 
-        .btn-custom, .btn-primary {
+        .btn-custom {
             background-color: var(--accent-color);
             color: #ffffff;
             border: none;
@@ -124,13 +127,13 @@
             transition: transform 0.2s, box-shadow 0.2s, background-color 0.3s;
         }
 
-        .btn-custom:hover, .btn-primary:hover {
+        .btn-custom:hover {
             transform: scale(var(--hover-scale));
             box-shadow: 0 5px 15px rgba(40, 167, 69, 0.4);
             background-color: #218838;
         }
 
-        [data-theme="dark"] .btn-custom:hover, [data-theme="dark"] .btn-primary:hover {
+        [data-theme="dark"] .btn-custom:hover {
             box-shadow: 0 5px 15px rgba(0, 255, 136, 0.4);
             background-color: #00cc70;
         }
@@ -145,7 +148,7 @@
         }
 
         [data-theme="dark"] .card {
-            background-color: var(--primary-bg);
+            background-color: var(--secondary-bg);
             color: var(--text-color);
         }
 
@@ -181,36 +184,6 @@
             color: var(--text-color);
         }
 
-        .input-group input {
-            transition: box-shadow 0.3s, border-color 0.3s;
-        }
-
-        .input-group input:focus {
-            box-shadow: 0 0 10px rgba(40, 167, 69, 0.5);
-            border-color: var(--accent-color);
-        }
-
-        .input-group input.is-valid {
-            border-color: var(--accent-color);
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'%3E%3Cpath fill='%2328a745' d='M2.3 6.73L.6 4.53c-.4-1.04.46-1.4 1.1-.8l1.1 1.4 3.4-3.8c.6-.63 1.6-.27 1.2.7l-4 4.6c-.43.5-.8.4-1.1.1z'/%3E%3C/svg%3E");
-            background-repeat: no-repeat;
-                background-position: right calc(0.375em + 0.1875rem) center;
-            background-size: calc(0.75em + 0.375rem) calc(0.75em + 0.375rem);
-        }
-
-        .input-group input.is-invalid {
-            border-color: #dc3545;
-        }
-
-        .btn-copy {
-            transition: all 0.3s;
-        }
-
-        .btn-copy:hover {
-            background: var(--accent-color);
-            box-shadow: 0 0 10px rgba(40, 167, 69, 0.5);
-        }
-
         .text-accent {
             color: var(--accent-color);
             transition: color 0.3s;
@@ -231,12 +204,6 @@
 
         .glow-text {
             text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
-        }
-
-        #progress-bar {
-            height: 4px;
-            background: var(--accent-color);
-            transition: width 0.3s ease-in-out;
         }
 
         .starry-bg {
@@ -355,8 +322,8 @@
     <header class="hero">
         <div class="container">
             <h1>SmartDev's Insta Scraper API <i class="fab fa-instagram me-2 text-accent"></i></h1>
-            <p>Extract direct media URLs from Instagram posts with ease and style! ✨</p>
-            <a href="#try-it" class="btn btn-custom mt-4">Try It Now</a>
+            <p>API documentation for extracting media URLs from Instagram posts and reels! ✨</p>
+            <a href="#docs" class="btn btn-custom mt-4">View Documentation</a>
         </div>
     </header>
 
@@ -370,7 +337,6 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto align-items-center">
                     <li class="nav-item"><a class="nav-link" href="#home">Home</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#try-it">Try It</a></li>
                     <li class="nav-item"><a class="nav-link" href="#docs">Docs</a></li>
                     <li class="nav-item"><a class="nav-link" href="#contribute">Contribute</a></li>
                     <li class="nav-item">
@@ -384,38 +350,24 @@
         </div>
     </nav>
 
-    <!-- Try It Section -->
-    <section id="try-it" class="container" data-aos="fade-up">
-        <h2>Try It Out 🌟</h2>
-        <div class="card p-4">
-            <p class="text-center text-success fs-5 mb-4">API Status: <span id="api-status" class="fw-bold">Checking...</span> ⚡️</p>
-            <form id="api-form" class="input-group mb-3" onsubmit="return false;">
-                <span class="input-group-text"><i class="fa-brands fa-instagram"></i></span>
-                <input id="instagram-url" type="text" class="form-control" placeholder="Enter Instagram post URL (e.g., https://www.instagram.com/p/XXXXX/)" required>
-                <button id="submit-url" class="btn btn-primary" type="button">Get Media URLs</button>
-            </form>
-            <div id="result" class="mt-3"></div>
-        </div>
-    </section>
-
     <!-- Documentation Section -->
     <section id="docs" class="container" data-aos="fade-up">
         <h2>API Documentation 📚</h2>
+        <p class="text-center text-success fs-5 mb-4">API Status: <span id="api-status" class="fw-bold">Live</span> ⚡️</p>
         <div class="accordion" id="docsAccordion">
             <div class="accordion-item">
                 <h2 class="accordion-header" id="headingApi">
                     <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseApi" aria-expanded="true" aria-controls="collapseApi">
-                        POST /download - How It Works
+                        GET /download - How It Works
                     </button>
                 </h2>
                 <div id="collapseApi" class="accordion-collapse collapse show" aria-labelledby="headingApi" data-bs-parent="#docsAccordion">
                     <div class="accordion-body">
-                        <p>Send a POST request to <code>/download</code> with a JSON payload containing an Instagram post URL.</p>
+                        <p>Send a GET request to <code>/download</code> with an Instagram post or reel URL as a query parameter.</p>
                         <pre>
 <strong>Request Example:</strong>
-curl -X POST https://your-api-url/download \
--H "Content-Type: application/json" \
--d '{"url": "https://www.instagram.com/p/XXXXX/"}'
+curl -X GET "https://its-smart-dev.vercel.app/download?url=https://www.instagram.com/p/XXXXX/"
+curl -X GET "https://its-smart-dev.vercel.app/download?url=https://www.instagram.com/reel/XXXXX/"
 
 <strong>Response Example (Success):</strong>
 {
@@ -424,17 +376,25 @@ curl -X POST https://your-api-url/download \
   "media_urls": [
     "https://instagram.com/.../media1.jpg",
     "https://instagram.com/.../media2.mp4"
-  ]
+  ],
+  "title": "Post caption",
+  "author": "username",
+  "developer": "API Developer : @ISmartDevs",
+  "channel": "Updates Channel : @TheSmartDev"
 }
 
 <strong>Response Example (Error):</strong>
 {
   "status": "error",
-  "message": "Invalid Instagram URL! Please ensure it contains a valid post code.",
-  "media_urls": []
+  "message": "URL Required To Download Your Desired Media!",
+  "media_urls": [],
+  "title": null,
+  "author": null,
+  "developer": "API Developer : @ISmartDevs",
+  "channel": "Updates Channel : @TheSmartDev"
 }
                         </pre>
-                        <p><strong>Note:</strong> RequiresF Requires valid Instagram session cookies (<code>cookies/cookies.txt</code>) in Netscape format with <code>sessionid</code> and <code>csrftoken</code>.</p>
+                        <p><strong>Note:</strong> Requires valid Instagram session cookies (<code>cookies.txt</code>) in Netscape format with <code>sessionid</code> and <code>csrftoken</code>.</p>
                     </div>
                 </div>
             </div>
@@ -459,9 +419,9 @@ curl -X POST https://your-api-url/download \
 
     <!-- Footer -->
     <footer>
-        <p>Built with ❤️ by <a href="https://x.com/ISmartDevs" target="_blank" class="text-accent"><i class="fa-brands fa-instagram"></i> ISmartDevs</a></p>
+        <p>Built with ❤️ by <a href="https://x.com/abirxdhackz" target="_blank" class="text-accent"><i class="fa-brands fa-instagram"></i> ISmartDevs</a></p>
         <p>Join our community at <a href="https://t.me/TheSmartDev" target="_blank" class="text-accent"><i class="fa-brands fa-telegram"></i> TheSmartDev</a></p>
-        <p>This API is Open Source on <a href="https://github.com/TheSmartDevs/Insta-Scrapper-API" target="_blank" class="text-accent"><i class="fa-brands fa-github"></i> @TheSmartDevs</a></p>
+        <p>This API is Open Source on <a href="https://github.com/TheSmartDevs/Insta-Scrapper-API" target='_blank' class="text-accent"><i class="fa-brands fa-github"></i> @TheSmartDevs</a></p>
         <p>© 2025 Instagram Post Scraper API | Powered by <a href="https://t.me/TheSmartDev" target="_blank" class="text-accent"><i class="fa-brands fa-telegram"></i> TheSmartDev</a></p>
     </footer>
 
@@ -474,8 +434,6 @@ curl -X POST https://your-api-url/download \
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <!-- AOS JS -->
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-    <!-- Confetti for Success Animation -->
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
     <!-- Client-side JavaScript -->
     <script>
         // Initialize AOS
@@ -565,147 +523,6 @@ curl -X POST https://your-api-url/download \
 
         backToTop.addEventListener('click', function() {
             window.scrollTo({ top: 0, behavior: 'smooth' });
-        });
-
-        // Mock API response for testing (replace with actual endpoint)
-        async function checkApiStatus() {
-            const statusEl = document.getElementById('api-status');
-            // Mock response since /download endpoint is not available
-            statusEl.textContent = 'Live';
-            statusEl.className = 'fw-bold text-success';
-            /* Replace with actual API call when endpoint is available:
-            try {
-                const response = await fetch('/download', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ url: '' })
-                });
-                statusEl.textContent = response.ok ? 'Live' : 'Alive ⚡️';
-                statusEl.className = response.ok ? 'fw-bold text-success' : 'fw-bold text-danger';
-            } catch (error) {
-                statusEl.textContent = 'Down';
-                statusEl.className = 'fw-bold text-danger';
-            }
-            */
-        }
-        checkApiStatus();
-
-        // Copy to clipboard function
-        function copyToClipboard(text) {
-            navigator.clipboard.writeText(text).then(() => {
-                alert('Copied to clipboard! ✨');
-            }).catch(() => {
-                alert('Failed to copy! 😔');
-            });
-        }
-
-        // Debounce function for input validation
-        function debounce(func, wait) {
-            let timeout;
-            return function executedFunction(...args) {
-                const later = () => {
-                    clearTimeout(timeout);
-                    func(...args);
-                };
-                clearTimeout(timeout);
-                timeout = setTimeout(later, wait);
-            };
-        }
-
-        // Real-time URL validation
-        const instagramUrlInput = document.getElementById('instagram-url');
-        instagramUrlInput.addEventListener('input', debounce(() => {
-            const url = instagramUrlInput.value;
-            if (url && url.includes('instagram.com/p/')) {
-                instagramUrlInput.classList.remove('is-invalid');
-                instagramUrlInput.classList.add('is-valid');
-            } else {
-                instagramUrlInput.classList.remove('is-valid');
-                instagramUrlInput.classList.add('is-invalid');
-            }
-        }, 300));
-
-        // Handle form submission
-        document.getElementById('submit-url').addEventListener('click', async () => {
-            const url = instagramUrlInput.value;
-            const resultDiv = document.getElementById('result');
-            const submitBtn = document.getElementById('submit-url');
-            const progressBar = document.getElementById('progress-bar');
-
-            // Basic URL validation
-            if (!url || !url.includes('instagram.com/p/')) {
-                resultDiv.innerHTML = `<div class="alert alert-danger" role="alert">Please enter a valid Instagram post URL! 😔</div>`;
-                return;
-            }
-
-            // Show loading state
-            submitBtn.disabled = true;
-            submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...';
-            resultDiv.innerHTML = '';
-            if (typeof gsap !== 'undefined') {
-                gsap.to(progressBar, { width: '50%', duration: 0.5 });
-            } else {
-                progressBar.style.width = '50%';
-            }
-
-            try {
-                // Mock response for testing
-                const data = {
-                    status: 'success',
-                    message: 'Media URLs extracted successfully (mock response).',
-                    media_urls: [
-                        'https://instagram.com/.../media1.jpg',
-                        'https://instagram.com/.../media2.mp4'
-                    ]
-                };
-                /* Replace with actual API call when endpoint is available:
-                const response = await fetch('/download', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ url })
-                });
-                const data = await response.json();
-                */
-                if (typeof gsap !== 'undefined') {
-                    gsap.to(progressBar, { width: '100%', duration: 0.5, onComplete: () => {
-                        gsap.to(progressBar, { width: '0%', duration: 0.3 });
-                    }});
-                } else {
-                    progressBar.style.width = '100%';
-                    setTimeout(() => { progressBar.style.width = '0%'; }, 500);
-                }
-
-                if (data.status === 'success') {
-                    // Trigger confetti on success
-                    confetti({
-                        particleCount: 100,
-                        spread: 70,
-                        origin: { y: 0.6 }
-                    });
-                    resultDiv.innerHTML = `
-                        <div class="alert alert-success" role="alert">${data.message} 🌟</div>
-                        <ul class="list-group">
-                            ${data.media_urls.map(url => `
-                                <li class="list-group-item d-flex justify-content-between align-items-center">
-                                    <a href="${url}" target="_blank" class="text-accent text-decoration-none">${url}</a>
-                                    <button class="btn btn-sm btn-outline-success btn-copy" data-bs-toggle="tooltip" data-bs-placement="top" title="Copy URL" onclick="copyToClipboard('${url}')">Copy</button>
-                                </li>
-                            `).join('')}
-                        </ul>`;
-                } else {
-                    resultDiv.innerHTML = `<div class="alert alert-danger" role="alert">Error: ${data.message} 😔</div>`;
-                }
-            } catch (error) {
-                if (typeof gsap !== 'undefined') {
-                    gsap.to(progressBar, { width: '0%', duration: 0.3 });
-                } else {
-                    progressBar.style.width = '0%';
-                }
-                resultDiv.innerHTML = `<div class="alert alert-danger" role="alert">API Is Down Sir Try Later 😔</div>`;
-            } finally {
-                submitBtn.disabled = false;
-                submitBtn.innerHTML = 'Get Media URLs';
-            }
         });
     </script>
 </body>
