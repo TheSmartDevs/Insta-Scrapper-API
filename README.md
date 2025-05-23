@@ -23,7 +23,7 @@ Welcome to **SmartDev's Instagram Scraper API**! 🚀 This powerful and user-fri
 
 ## 📸 Demo
 
-Try out the API directly on our [Live Demo](https://insta-scrapper-api.vercel.app/) and see it in action! Enter an Instagram post URL and get media URLs instantly.
+Try out the API directly on our [Live Demo](https://its-smart-dev.vercel.app/) and see it in action! Enter an Instagram post URL and get media URLs instantly.
 
 ---
 
