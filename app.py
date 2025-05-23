@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify, send_file
+from flask import Flask, request, jsonify, send_file  # Added send_file import
 import instaloader
 import os
 import re
@@ -7,29 +7,13 @@ import http.cookiejar
 app = Flask(__name__)
 
 def validate_url(url):
-    """
-    Validate and extract shortcode from Instagram URL.
-    
-    Args:
-        url (str): Instagram post URL
-    Returns:
-        str: Shortcode if valid, None otherwise
-    """
-    pattern = r'instagram\.com/p/([A-Za-z0-9-_]+)'
+    pattern = r'instagram\.com/(p|reel|tv)/([A-Za-z0-9-_]+)'
     match = re.search(pattern, url)
     if match:
-        return match.group(1)
+        return match.group(2)
     return None
 
 def load_cookies_from_file(cookies_path):
-    """
-    Load Instagram cookies from a Netscape-format cookies.txt file.
-    
-    Args:
-        cookies_path (str): Path to cookies.txt file
-    Returns:
-        dict: Dictionary of cookies (sessionid, csrftoken) or None if invalid
-    """
     cookies = {}
     try:
         cookie_jar = http.cookiejar.MozillaCookieJar()
@@ -41,63 +25,55 @@ def load_cookies_from_file(cookies_path):
             return cookies
         else:
             return None
-    except Exception as e:
+    except Exception:
         return None
 
-def get_instagram_post_urls(url, cookies_file="cookies/cookies.txt"):
-    """
-    Extract direct media URLs for an Instagram post.
-    Requires valid cookies in cookies_file.
+def get_instagram_post_urls(url, cookies_file="cookies.txt"):
+    result = {
+        "status": "error",
+        "message": "",
+        "media_urls": [],
+        "title": None,
+        "author": None,
+        "developer": "API Developer : @ISmartDevs",
+        "channel": "Updates Channel : @TheSmartDev"
+    }
     
-    Args:
-        url (str): Instagram post URL
-        cookies_file (str): Path to cookies.txt file for session authentication
-    Returns:
-        dict: Result with status, message, and media URLs (if successful)
-    """
-    result = {"status": "error", "message": "", "media_urls": []}
-    
-    # Validate URL
     shortcode = validate_url(url)
     if not shortcode:
-        result["message"] = "Invalid Instagram URL! Please ensure it contains a valid post code (e.g., instagram.com/p/XXXXX)."
+        result["message"] = "Please Provide Valid URL"
         return result
 
     try:
-        # Initialize Instaloader with custom User-Agent
         loader = instaloader.Instaloader(
             user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/118.0.0.0 Safari/537.36"
         )
 
-        # Resolve absolute path for cookies file relative to script directory
         script_dir = os.path.dirname(os.path.abspath(__file__))
         cookies_path = os.path.join(script_dir, cookies_file)
 
-        # Check if cookies file exists
         if not os.path.isfile(cookies_path):
-            result["message"] = f"Cookies file not found at {cookies_path}. Ensure {cookies_file} exists with valid Instagram cookies in Netscape format."
+            result["message"] = f"Cookies Missing Bro Add Cookies"
             return result
 
-        # Load cookies
         cookies = load_cookies_from_file(cookies_path)
         if not cookies:
-            result["message"] = "Failed to load session from cookies.txt: Missing required cookies (sessionid, csrftoken) or invalid format."
+            result["message"] = "Invalid Cookies Provided Update Cookies"
             return result
 
-        # Set cookies in the Instaloader context
         loader.context._session.cookies.set("sessionid", cookies["sessionid"], domain=".instagram.com")
         loader.context._session.cookies.set("csrftoken", cookies["csrftoken"], domain=".instagram.com")
 
-        # Get post and extract media URLs
         post = instaloader.Post.from_shortcode(loader.context, shortcode)
-        media_urls = []
 
+        media_urls = []
+        # For videos or images
         if post.is_video:
             media_urls.append(post.video_url)
         else:
             media_urls.append(post.url)
 
-        # Handle multi-media posts (sidecar)
+        # If sidecar (multiple media)
         if post.typename == "GraphSidecar":
             for node in post.get_sidecar_nodes():
                 media_urls.append(node.video_url if node.is_video else node.display_url)
@@ -105,16 +81,19 @@ def get_instagram_post_urls(url, cookies_file="cookies/cookies.txt"):
         result["status"] = "success"
         result["message"] = "Media URLs extracted successfully."
         result["media_urls"] = media_urls
+        result["title"] = post.caption if post.caption else "No caption"
+        result["author"] = post.owner_username
+
         return result
 
     except instaloader.exceptions.LoginRequiredException:
-        result["message"] = f"Login required! This post may be private or requires authentication. Provide a valid {cookies_file} with active session cookies."
+        result["message"] = "Sorry Bro Private Post Need Proper Cookies"
         return result
     except instaloader.exceptions.BadResponseException as bre:
-        result["message"] = f"Instagram blocked the request (403 Forbidden): {str(bre)}. Ensure {cookies_file} contains valid, non-expired session cookies."
+        result["message"] = f"Instagram Meta API Dead"
         return result
     except Exception as e:
-        result["message"] = f"Oops! Something went wrong: {str(e)}. Check your internet connection, URL, cookies file, or try again later."
+        result["message"] = f"Error: {str(e)}"
         return result
 
 @app.route('/', methods=['GET'])
@@ -125,31 +104,15 @@ def api_status():
     """
     return send_file('status.html'), 200
 
-@app.route('/download', methods=['POST'])
-def download_post():
-    """
-    Flask endpoint to extract Instagram post media URLs.
-    Expects JSON payload: {"url": "https://www.instagram.com/p/XXXXX/"}
-    Returns JSON response with status, message, and media URLs.
-    """
-    data = request.get_json()
-    if not data or "url" not in data:
-        return jsonify({
-            "status": "error",
-            "message": "Invalid request. Please provide a JSON payload with a 'url' field."
-        }), 400
-
-    url = data["url"].strip()
+@app.route('/download', methods=['GET'])
+def download():
+    url = request.args.get("url")
     if not url:
-        return jsonify({
-            "status": "error",
-            "message": "URL cannot be empty."
-        }), 400
+        return jsonify({"status": "error", "message": "URL Required To Download Your Desired Media!"}), 400
 
-    # Get media URLs
     result = get_instagram_post_urls(url)
     status_code = 200 if result["status"] == "success" else 400
     return jsonify(result), status_code
 
-# For Vercel serverless (WSGI export)
-application = app
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=5000, debug=True)
