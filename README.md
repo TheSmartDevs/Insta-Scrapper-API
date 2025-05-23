@@ -5,25 +5,16 @@
 ![GitHub issues](https://img.shields.io/github/issues/TheSmartDevs/Insta-Scrapper-API)
 ![License](https://img.shields.io/github/license/TheSmartDevs/Insta-Scrapper-API)
 
-Welcome to **SmartDev's Instagram Scraper API**! 🚀 This powerful and user-friendly API allows you to extract direct media URLs (images and videos) from Instagram posts with ease. Whether you're a developer, content creator, or data enthusiast, our API is designed to make your life simpler and your projects shine! ✨
+Welcome to **SmartDev's Instagram Scraper API**! 🚀 This API allows developers to extract direct media URLs (images and videos) from Instagram posts and reels using a simple and reliable endpoint. Designed for developers and data enthusiasts, this open-source project provides clear documentation to integrate Instagram media scraping into your applications.
 
 ---
 
 ## 🌟 Features
 
-- **Fast & Reliable**: Quickly scrape media URLs from Instagram posts.
-- **Easy to Use**: Simple POST request with a JSON payload.
+- **Fast & Reliable**: Extract media URLs from Instagram posts and reels quickly.
+- **Simple Endpoint**: Use a single GET request with a URL query parameter.
 - **Open Source**: Fully open-source and community-driven.
-- **Dark/Light Mode**: Sleek UI with theme toggle for a personalized experience.
-- **Responsive Design**: Works seamlessly on desktop and mobile devices.
-- **Real-time Validation**: Instant feedback on Instagram URL input.
-- **Success Animations**: Celebrate successful extractions with confetti! 🎉
-
----
-
-## 📸 Demo
-
-Try out the API directly on our [Live Demo](https://its-smart-dev.vercel.app/) and see it in action! Enter an Instagram post URL and get media URLs instantly.
+- **Comprehensive Documentation**: Clear examples and notes for easy integration.
 
 ---
 
@@ -61,21 +52,20 @@ Try out the API directly on our [Live Demo](https://its-smart-dev.vercel.app/) a
    ```
 
 5. **Access the API**:
-   - The API will be available at `http://localhost:3000` (or your deployed URL).
+   - The API will be available at `http://localhost:3000` (or your deployed URL, e.g., `https://its-smart-dev.vercel.app`).
 
 ---
 
 ## 📚 API Documentation
 
-### Endpoint: `POST /download`
+### Endpoint: `GET /download`
 
-Extract media URLs from an Instagram post.
+Extract media URLs from an Instagram post or reel.
 
 #### Request
 ```bash
-curl -X POST https://your-api-url/download \
--H "Content-Type: application/json" \
--d '{"url": "https://www.instagram.com/p/XXXXX/"}'
+curl -X GET "https://your-api-url/download?url=https://www.instagram.com/p/XXXXX/"
+curl -X GET "https://your-api-url/download?url=https://www.instagram.com/reel/XXXXX/"
 ```
 
 #### Response (Success)
@@ -86,7 +76,11 @@ curl -X POST https://your-api-url/download \
   "media_urls": [
     "https://instagram.com/.../media1.jpg",
     "https://instagram.com/.../media2.mp4"
-  ]
+  ],
+  "title": "Post caption",
+  "author": "username",
+  "developer": "API Developer : @ISmartDevs",
+  "channel": "Updates Channel : @TheSmartDev"
 }
 ```
 
@@ -94,14 +88,19 @@ curl -X POST https://your-api-url/download \
 ```json
 {
   "status": "error",
-  "message": "Invalid Instagram URL! Please ensure it contains a valid post code.",
-  "media_urls": []
+  "message": "URL Required To Download Your Desired Media!",
+  "media_urls": [],
+  "title": null,
+  "author": null,
+  "developer": "API Developer : @ISmartDevs",
+  "channel": "Updates Channel : @TheSmartDev"
 }
 ```
 
 #### Notes
-- Requires valid Instagram session cookies in `cookies/cookies.txt`.
-- Ensure the URL is in the format `https://www.instagram.com/p/XXXXX/`.
+- Requires valid Instagram session cookies in `cookies/cookies.txt` with `sessionid` and `csrftoken`.
+- The URL must be in the format `https://www.instagram.com/p/XXXXX/` for posts or `https://www.instagram.com/reel/XXXXX/` for reels.
+- Query parameters (e.g., `?igsh=...`) are ignored by the API.
 
 ---
 
@@ -110,11 +109,7 @@ curl -X POST https://your-api-url/download \
 ### Using JavaScript (Fetch)
 ```javascript
 const url = "https://www.instagram.com/p/XXXXX/";
-fetch("https://your-api-url/download", {
-  method: "POST",
-  headers: { "Content-Type": "application/json" },
-  body: JSON.stringify({ url })
-})
+fetch(`https://your-api-url/download?url=${encodeURIComponent(url)}`)
   .then(response => response.json())
   .then(data => console.log(data))
   .catch(error => console.error("Error:", error));
@@ -124,8 +119,8 @@ fetch("https://your-api-url/download", {
 ```python
 import requests
 
-url = "https://www.instagram.com/p/XXXXX/"
-response = requests.post("https://your-api-url/download", json={"url": url})
+url = "https://www.instagram.com/reel/XXXXX/"
+response = requests.get(f"https://your-api-url/download?url={url}")
 print(response.json())
 ```
 
@@ -158,7 +153,7 @@ Check out the repository on [GitHub](https://github.com/TheSmartDevs/Insta-Scrap
 
 Join our community and stay updated:
 
-- **Instagram**: [@ISmartDevs](https://x.com/ISmartDevs)
+- **Instagram**: [@ISmartDevs](https://x.com/abirxdhackz)
 - **Telegram**: [TheSmartDev](https://t.me/TheSmartDev)
 - **GitHub**: [@TheSmartDevs](https://github.com/TheSmartDevs/Insta-Scrapper-API)
 
@@ -167,7 +162,7 @@ Join our community and stay updated:
 ## 🏆 Acknowledgments
 
 - Built with ❤️ by [TheSmartDevs](https://t.me/TheSmartDev).
-- Powered by [Bootstrap](https://getbootstrap.com), [Font Awesome](https://fontawesome.com), and [GSAP](https://greensock.com/gsap/).
+- Powered by [Bootstrap](https://getbootstrap.com), [Font Awesome](https://fontawesome.com), and [GSAP](https://greensock.com/gsap/) for the documentation site.
 - Special thanks to our contributors! 🌟
 
 ---
@@ -179,4 +174,3 @@ This project is licensed under the [MIT License](LICENSE).
 ---
 
 © 2025 SmartDev's Instagram Scraper API | Powered by [TheSmartDev](https://t.me/TheSmartDev)
-
